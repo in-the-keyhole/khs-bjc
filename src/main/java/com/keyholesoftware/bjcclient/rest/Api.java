@@ -3,6 +3,7 @@ package com.keyholesoftware.bjcclient.rest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -20,5 +21,11 @@ public class Api {
 	@RequestMapping(method = RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody SampleObject sample() {
 		return sampleService.sample();
+	}
+
+	@RequestMapping(value="{simulate}", method = RequestMethod.PUT, produces=MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody boolean simulate(@PathVariable boolean simulate) {
+		sampleService.setSimulate(simulate);
+		return sampleService.isSimulate();
 	}
 }
