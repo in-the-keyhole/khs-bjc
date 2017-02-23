@@ -1,26 +1,24 @@
 package com.keyholesoftware.bjcclient.rest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.keyholesoftware.bjcclient.service.SampleService;
 import com.khs.hystrix.model.SampleObject;
 
-@RestController
+@Controller
+@RequestMapping("sample")
 public class Api {
 
-	@RequestMapping(method = RequestMethod.GET, value = "/api/sample", produces = MediaType.APPLICATION_JSON_VALUE)
-	SampleObject mock() {
-		RestTemplate template = new RestTemplate();
+	@Autowired
+	SampleService sampleService;
 
-		template.getMessageConverters().add( new ObjectMessageConverter());
-		ResponseEntity<SampleObject> object1 = template.getForEntity("http://localhost:8080/app/sample", SampleObject.class);
-
-		System.out.println(object1.getBody());
-
-		return object1.getBody();
+	@RequestMapping(method = RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody SampleObject sample() {
+		return sampleService.sample();
 	}
 }
