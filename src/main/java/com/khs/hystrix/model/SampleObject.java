@@ -13,6 +13,10 @@ public class SampleObject implements Serializable {
 	private int four;
 	private String five;
 
+	public SampleObject(int one) {
+		this.one = one;
+	}
+
 	public int getOne() {
 		return one;
 	}

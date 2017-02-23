@@ -11,10 +11,12 @@ import com.netflix.hystrix.HystrixCommandProperties;
 
 public class SampleHystrixCommand extends HystrixCommand<SampleObject> {
 
+	private SampleObject cachedSample = new SampleObject(999);
+
 	public SampleHystrixCommand() {
 		super(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey("Sample"))
 				// defaulting to a fairly long timeout value
-				.andCommandPropertiesDefaults(HystrixCommandProperties.Setter().withExecutionTimeoutInMilliseconds(3000)));
+				.andCommandPropertiesDefaults(HystrixCommandProperties.Setter().withExecutionTimeoutInMilliseconds(5000)));
 	}
 
 	@Override
@@ -27,5 +29,10 @@ public class SampleHystrixCommand extends HystrixCommand<SampleObject> {
 		System.out.println(object1.getBody());
 
 		return object1.getBody();
+	}
+
+	@Override
+	protected SampleObject getFallback() {
+		return cachedSample;
 	}
 }
