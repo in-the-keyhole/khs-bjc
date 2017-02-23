@@ -16,42 +16,40 @@ import com.khs.hystrix.model.SampleObject;
 
 public class ObjectMessageConverter implements HttpMessageConverter<Object> {
 
-	public boolean canRead(Class<?> arg0, MediaType arg1) {
-		if ("application/x-java-serialized-object".equals(arg1) || arg0.equals(SampleObject.class)) {
-			return true;
-		}
-		return false;
-	}
+    public boolean canRead(Class<?> arg0, MediaType arg1) {
+        if ("application/x-java-serialized-object".equals(arg1) || arg0.equals(SampleObject.class)) {
+            return true;
+        }
+        return false;
+    }
 
-	public boolean canWrite(Class<?> arg0, MediaType arg1) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    public boolean canWrite(Class<?> arg0, MediaType arg1) {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
-	public List<MediaType> getSupportedMediaTypes() {
-		return Collections.singletonList(MediaType.valueOf("application/x-java-serialized-object"));
-	}
+    public List<MediaType> getSupportedMediaTypes() {
+        return Collections.singletonList(MediaType.valueOf("application/x-java-serialized-object"));
+    }
 
-	public Object read(Class<? extends Object> arg0, HttpInputMessage arg1) throws IOException, HttpMessageNotReadableException {
-		Object response = null;
+    public Object read(Class<? extends Object> arg0, HttpInputMessage arg1) throws IOException, HttpMessageNotReadableException {
+        Object response = null;
 
-		ObjectInputStream objectInputStream = new ObjectInputStream(arg1.getBody());
-		try {
-			response = objectInputStream.readObject();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} finally {
-			objectInputStream.close();
-		}
+        ObjectInputStream objectInputStream = new ObjectInputStream(arg1.getBody());
+        try {
+            response = objectInputStream.readObject();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            objectInputStream.close();
+        }
 
-		return response;
-	}
+        return response;
+    }
 
-	public void write(Object arg0, MediaType arg1, HttpOutputMessage arg2)
-			throws IOException, HttpMessageNotWritableException {
-		// TODO Auto-generated method stub
+    public void write(Object arg0, MediaType arg1, HttpOutputMessage arg2) throws IOException, HttpMessageNotWritableException {
+        // TODO Auto-generated method stub
 
-	}
-
+    }
 
 }

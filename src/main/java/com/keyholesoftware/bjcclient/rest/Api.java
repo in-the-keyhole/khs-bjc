@@ -15,17 +15,19 @@ import com.khs.hystrix.model.SampleObject;
 @RequestMapping("sample")
 public class Api {
 
-	@Autowired
-	SampleService sampleService;
+    @Autowired
+    SampleService sampleService;
 
-	@RequestMapping(method = RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody SampleObject sample() {
-		return sampleService.sample();
-	}
+    @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    SampleObject sample() {
+        return sampleService.sample();
+    }
 
-	@RequestMapping(value="{simulate}", method = RequestMethod.PUT, produces=MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody boolean simulate(@PathVariable boolean simulate) {
-		sampleService.setSimulate(simulate);
-		return sampleService.isSimulate();
-	}
+    @RequestMapping(value = "{simulate}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    boolean simulate(@PathVariable boolean simulate) {
+        sampleService.setSimulate(simulate);
+        return sampleService.isSimulate();
+    }
 }

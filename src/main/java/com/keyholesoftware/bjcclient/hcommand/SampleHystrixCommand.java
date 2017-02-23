@@ -11,28 +11,28 @@ import com.netflix.hystrix.HystrixCommandProperties;
 
 public class SampleHystrixCommand extends HystrixCommand<SampleObject> {
 
-	private SampleObject cachedSample = new SampleObject(999);
+    private SampleObject cachedSample = new SampleObject(999);
 
-	public SampleHystrixCommand() {
-		super(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey("Sample"))
-				// defaulting to a fairly long timeout value
-				.andCommandPropertiesDefaults(HystrixCommandProperties.Setter().withExecutionTimeoutInMilliseconds(5000)));
-	}
+    public SampleHystrixCommand() {
+        super(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey("Sample"))
+                // defaulting to a fairly long timeout value
+                .andCommandPropertiesDefaults(HystrixCommandProperties.Setter().withExecutionTimeoutInMilliseconds(5000)));
+    }
 
-	@Override
-	protected SampleObject run() throws Exception {
-		RestTemplate template = new RestTemplate();
+    @Override
+    protected SampleObject run() throws Exception {
+        RestTemplate template = new RestTemplate();
 
-		template.getMessageConverters().add( new ObjectMessageConverter());
-		ResponseEntity<SampleObject> object1 = template.getForEntity("http://server:8080/app/sample", SampleObject.class);
+        template.getMessageConverters().add(new ObjectMessageConverter());
+        ResponseEntity<SampleObject> object1 = template.getForEntity("http://server:8080/app/sample", SampleObject.class);
 
-		System.out.println(object1.getBody());
+        System.out.println(object1.getBody());
 
-		return object1.getBody();
-	}
+        return object1.getBody();
+    }
 
-	@Override
-	protected SampleObject getFallback() {
-		return cachedSample;
-	}
+    @Override
+    protected SampleObject getFallback() {
+        return cachedSample;
+    }
 }
