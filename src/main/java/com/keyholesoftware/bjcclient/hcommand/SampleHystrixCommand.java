@@ -16,7 +16,8 @@ public class SampleHystrixCommand extends HystrixCommand<SampleObject> {
     public SampleHystrixCommand() {
         super(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey("Sample"))
                 // defaulting to a fairly long timeout value
-                .andCommandPropertiesDefaults(HystrixCommandProperties.Setter().withExecutionTimeoutInMilliseconds(3000)));
+                .andCommandPropertiesDefaults(HystrixCommandProperties.Setter().withExecutionTimeoutInMilliseconds(3000)
+                        .withCircuitBreakerErrorThresholdPercentage(50)));
     }
 
     @Override
