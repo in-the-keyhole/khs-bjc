@@ -1,5 +1,8 @@
 package com.keyholesoftware.bjcclient.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -13,19 +16,28 @@ public class SampleService {
 
     private boolean simulate = false;
 
+    @Value("${server.url:http://server:8080/app}")
+    private String serverUrl;
+
+    private static final Logger LOG = LoggerFactory.getLogger(SampleService.class);
+
+    public SampleService() {
+        LOG.info(serverUrl);
+    }
+
     public SampleObject sample() {
-        return new SampleHystrixCommand().execute();
+        return new SampleHystrixCommand(serverUrl).execute();
     }
 
     public SampleObject sampleDirect() {
         RestTemplate template = new RestTemplate();
 
         template.getMessageConverters().add(new ObjectMessageConverter());
-        ResponseEntity<SampleObject> object1 = template.getForEntity("http://server:8080/app/sample", SampleObject.class);
+        ResponseEntity<SampleObject> response = template.getForEntity(serverUrl + "/sample", SampleObject.class);
 
-        System.out.println(object1.getBody());
+        LOG.info(response.getBody().toString());
 
-        return object1.getBody();
+        return response.getBody();
     }
 
     private void startSimulation() {

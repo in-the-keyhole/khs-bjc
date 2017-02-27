@@ -25,6 +25,7 @@
 	
 	<context:component-scan base-package="com.keyholesoftware.bjcclient" />
 	
+	<context:property-placeholder location="classpath:application.properties"/>
 	
 	
 </beans:beans>

@@ -1,5 +1,6 @@
 package com.keyholesoftware.bjcclient.hcommand;
 
+import org.apache.log4j.Logger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
@@ -12,12 +13,17 @@ import com.netflix.hystrix.HystrixCommandProperties;
 public class SampleHystrixCommand extends HystrixCommand<SampleObject> {
 
     private SampleObject cachedSample = new SampleObject(999);
+    private String serverUrl;
 
-    public SampleHystrixCommand() {
+    private static final Logger LOG = Logger.getLogger(SampleHystrixCommand.class);
+
+    public SampleHystrixCommand(String serverUrl) {
         super(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey("Sample"))
                 // defaulting to a fairly long timeout value
                 .andCommandPropertiesDefaults(HystrixCommandProperties.Setter().withExecutionTimeoutInMilliseconds(3000)
                         .withCircuitBreakerErrorThresholdPercentage(50)));
+
+        this.serverUrl = serverUrl;
     }
 
     @Override
@@ -25,15 +31,16 @@ public class SampleHystrixCommand extends HystrixCommand<SampleObject> {
         RestTemplate template = new RestTemplate();
 
         template.getMessageConverters().add(new ObjectMessageConverter());
-        ResponseEntity<SampleObject> object1 = template.getForEntity("http://server:8080/app/sample", SampleObject.class);
+        ResponseEntity<SampleObject> response = template.getForEntity(serverUrl + "/sample", SampleObject.class);
 
-        System.out.println(object1.getBody());
+        LOG.info(response.getBody());
 
-        return object1.getBody();
+        return response.getBody();
     }
 
     @Override
     protected SampleObject getFallback() {
+        LOG.warn("In getFallback");
         return cachedSample;
     }
 }
